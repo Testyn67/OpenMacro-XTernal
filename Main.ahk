@@ -28,7 +28,6 @@ You do not retain ownership rights that allow you to license or distribute the c
 #Include shared\Constants.ahk
 #Include shared\Settings.ahk
 #Include shared\Update.ahk
-#Include shared\Telemetry.ahk
 #Include shared\Process.ahk
 #Include shared\Read.ahk
 #Include shared\OffsetsRemote.ahk
@@ -46,8 +45,6 @@ You do not retain ownership rights that allow you to license or distribute the c
 
 global Macro := CreateFishingMacro()
 global Controller := FishingController()
-
-OnExit(TelemetryOnExit)
 
 if HandleStartupUpdate()
     ExitApp()
@@ -69,7 +66,6 @@ Initialize() {
     global RBLX_PID, RBLX_BASE, ROD, Macro
 
     EnsureAppDataDirs()
-    StartTelemetry()
 
     if (rbxPid := GetRobloxPID()) {
         CheckRobloxVersionMismatch(rbxPid)
