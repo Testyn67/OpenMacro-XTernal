@@ -157,13 +157,14 @@ StartMacroCycle() {
             WebhookSession.lastSummaryAt := A_TickCount
         }
     }
-	Dreambreaker := IsDreambreakerRodText(ROD)
+
     if (IsTranquilityRodText(ROD))
         Controller := TranquilityController()
     else if (IsPinionRodText(ROD))
         Controller := PinionController()
     else
         Controller := FishingController()
+	Dreambreaker := IsDreambreakerRodText(ROD)
     ReleaseMouse()
     Controller.Reset()
     InitializeCastCycle()
@@ -1189,7 +1190,7 @@ class FishingController {
 	; now checks in StartMacroCycle if rod matches text, should prevent constant checking
 	IsInverted(){
 		global Dreambreaker
-	
+		
 		if(!Dreambreaker)
 			return false
 		
@@ -1291,13 +1292,16 @@ class PinionController extends FishingController {
 		playerbarX := this.GetPlayerbarPosition(ctx)
 		if (playerbarX = "")
 			return fishX
+
+        note := GetActiveNoteTarget()
+        if (note = "")
+            return fishX
 			
 		if (this.resonanceActive)
 			return note.sx
-
-        note := GetActiveNoteTarget()
-        if (note = "" || note.sy < PinionController.NOTE_DEADZONE)
-            return fishX
+		
+		if (note.sy < PinionController.NOTE_DEADZONE)
+			return fishX
 			
 		this.UpdateNoteCount(note, ctx)
 		
