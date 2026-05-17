@@ -145,7 +145,7 @@ MacroLoop() {
 }
 
 StartMacroCycle() {
-    global Macro, Controller, ROD, WebhookSession
+    global Macro, Controller, ROD, WebhookSession, Dreambreaker
 
     if (Macro.phase = "OFF") {
         Macro.totemNightCovered := false
@@ -164,6 +164,7 @@ StartMacroCycle() {
         Controller := PinionController()
     else
         Controller := FishingController()
+	Dreambreaker := IsDreambreakerRodText(ROD)
     ReleaseMouse()
     Controller.Reset()
     InitializeCastCycle()
@@ -1034,32 +1035,30 @@ GetNoteContainer() {
     return FindChildByName(ctx.bar, "noteContainer")
 }
 
-; Returns the nearest airborne note to the bar's current X, or "" if none.
-; Notes are always the priority — fish tracking only happens during gaps
-; between notes. Picking the nearest one keeps the bar from abandoning a
-; close note for a more distant one.
-GetActiveNoteTarget(playerbarX) {
-    noteContainer := GetNoteContainer()
-    if (!noteContainer)
-        return ""
+; Prefer the lowest note on the screen.
+; It could have checked the Y relative to the bar itself, but this was a quick and dirty modification
+GetActiveNoteTarget() {
+	noteContainer := GetNoteContainer()
+	if (!noteContainer)
+		return ""
 
-    best := ""
-    bestDist := 99999.0
+	best := ""
+	bestY := -999999.0
 
-    for noteName in ["note1", "note2"] {
-        noteAddr := FindChildByName(noteContainer, noteName)
-        if (!noteAddr)
-            continue
-        pos := ReadNotePosition(noteAddr)
-        if (pos.sy > 0.55 || pos.sy < -30)
-            continue
-
-        dist := Abs(pos.sx - playerbarX)
-        if (dist < bestDist) {
-            bestDist := dist
-            best := { sx: pos.sx, sy: pos.sy }
-        }
-    }
+	for noteName in ["note1", "note2"] {
+		noteAddr := FindChildByName(noteContainer, noteName)
+		if (!noteAddr)
+			continue
+		pos := ReadNotePosition(noteAddr)
+		if (pos.sy > 0.55 || pos.sy < -30)
+			continue
+		
+		;it took me a bit to end up to this, mostly because i thought there was a better way on doing this (there probably was, but this was faster)
+		if (pos.sy > bestY) {
+			bestY := pos.sy
+			best := { sx: pos.sx, sy: pos.sy }
+		}
+	}
 
     return best
 }
@@ -1188,65 +1187,131 @@ class FishingController {
         return playerbarPos.X
     }
 
+	; now checks in StartMacroCycle if rod matches text, should prevent constant checking
+	IsInverted(){
+		global Dreambreaker
+		
+		if(!Dreambreaker)
+			return false
+		
+		progress := GetFishingCompletionPercent()
+		if (progress = "")
+			return false
+		
+		return (progress + 0.0) >= 40.0
+	}
+
     Hold() {
-        HoldMouse()
+		if(this.IsInverted())
+			ReleaseMouse()
+		else
+			HoldMouse()
     }
 
     Release() {
-        ReleaseMouse()
+		if(this.IsInverted())
+			HoldMouse()
+		else
+			ReleaseMouse()
     }
 }
 
-class PinionController extends FishingController {
-    static NOTE_MODE_ENTRY := 27.0
-    static NOTE_MODE_EXIT  := 20.0
+IsNoteInPlayerBar(x, ctx := "", padding := 0) {
+	if (ctx = "")
+		ctx := GetReelBarContext()
 
-    pinionNoteModeActive := false
+	if (!ctx || !ctx.playerbar)
+		return false
+
+	playerbarPos := ReadFramePosition(ctx.playerbar)
+	playerbarSize := ReadFrameSize(ctx.playerbar)
+
+	halfWidth := playerbarSize.X / 2
+
+	return (
+		x >= playerbarPos.X - halfWidth - padding
+		&& x <= playerbarPos.X + halfWidth + padding
+	)
+}
+
+	; nerfed version for free macro
+class PinionController extends FishingController {
+	; changed deadzone to static since it's not being changed at any point of time
+	static NOTE_DEADZONE := -19.5
+	
+	notesCaught := 0
+	noteCounted := false
+	resonanceActive := false
 
     Reset() {
         super.Reset()
-        this.pinionNoteModeActive := false
+		this.notesCaught := 0
+		this.noteCounted := false
+		this.resonanceActive := false
     }
-
+	
+	; reverted version, only calculates midpoint
+	GetBothTargets(fishX, noteX, halfWidth) {
+		distance := Abs(noteX - fishX)
+		fullWidth := halfWidth * 2
+		
+		if(distance > fullWidth)
+			return ""
+		
+		return (fishX + noteX) / 2
+	}
+	
+	; this could actually be optimized slightly by not having it constantly count after resonanceActive
+	; Pretty sure the performance bonus was too small to be worth the extra work
+	UpdateNoteCount(note, ctx){
+		if(!this.noteCounted && note.sy >= -0.8 && note.sy <= 0.53){
+			if(IsNoteInPlayerBar(note.sx, ctx, 0.1)){
+				this.noteCounted := true
+				this.notesCaught += 1
+			}else{
+				this.notesCaught := 0
+				this.resonanceActive := false
+				this.noteCounted := true
+			}
+		}
+		if(note.sy < -8)
+			this.noteCounted := false
+			
+		if (this.notesCaught >= 7)
+			this.resonanceActive := true
+	}
+	
+	; moved notecount loop into a separate function for easier readability
     GetFishPosition(ctx := "") {
         if (ctx = "")
             ctx := GetReelBarContext()
         fishX := super.GetFishPosition(ctx)
-        playerbarX := this.GetPlayerbarPosition(ctx)
+		if (!ctx || !ctx.playerbar)
+			return fishX
+		playerbarSize := ReadFrameSize(ctx.playerbar)
+		halfWidth := playerbarSize.X / 2
+		
+		playerbarX := this.GetPlayerbarPosition(ctx)
+		if (playerbarX = "")
+			return fishX
 
-        if (playerbarX = "")
-            return fishX
-
-        progress := GetFishingCompletionPercent()
-
-        ; Hysteresis gate: must reach entry threshold to start note mode,
-        ; stays active until progress falls below the lower exit threshold.
-        if (progress = "") {
-            this.pinionNoteModeActive := false
-            return fishX
-        }
-
-        if (this.pinionNoteModeActive) {
-            if (progress < PinionController.NOTE_MODE_EXIT) {
-                this.pinionNoteModeActive := false
-                return fishX
-            }
-        } else {
-            if (progress < PinionController.NOTE_MODE_ENTRY)
-                return fishX
-            this.pinionNoteModeActive := true
-        }
-
-        note := GetActiveNoteTarget(playerbarX)
+        note := GetActiveNoteTarget()
         if (note = "")
             return fishX
+			
+		if (this.resonanceActive)
+			return note.sx
+		
+		if (note.sy < PinionController.NOTE_DEADZONE)
+			return fishX
+			
+		this.UpdateNoteCount(note, ctx)
+		
+		bothCatch := this.GetBothTargets(fishX, note.sx, halfWidth)
+		if (bothCatch != "")
+			return bothCatch
 
-        t := Min(1.0, (progress - PinionController.NOTE_MODE_ENTRY) / 28.0)
-        maxReach := 0.1 + (t * 0.9)
-        if (Abs(note.sx - playerbarX) > maxReach)
-            return fishX
-
-        return note.sx
+		return note.sx
     }
 }
 
