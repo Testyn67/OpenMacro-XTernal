@@ -1188,9 +1188,9 @@ class FishingController {
 
 	; now checks in StartMacroCycle if rod matches text, should prevent constant checking
 	IsInverted(){
-		global ROD
+		global Dreambreaker
 	
-		if(!IsDreambreakerRodText(ROD))
+		if(!Dreambreaker)
 			return false
 		
 		progress := GetFishingCompletionPercent()
