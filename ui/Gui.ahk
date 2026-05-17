@@ -95,54 +95,47 @@ GetGui() {
     DerivativeGain.OnEvent("LoseFocus", (*) => ValidateAndSaveMain("derivative_gain", DerivativeGain, 0.00, 1.00, false, 2))
     EdgeBoundary.OnEvent("LoseFocus", (*) => ValidateAndSaveMain("edge_boundary", EdgeBoundary, 0.02, 0.30, false, 2))
 
-    mg.AddGroupBox("x10 y235 w380 h160 c" TextColor, "Main").SetFont("s9 bold")
+    mg.AddGroupBox("x10 y235 w380 h130 c" TextColor, "Main").SetFont("s9 bold")
 
-    mg.AddText("x20 y255 w150 h20 c" TextColor, "Rod resilience").SetFont("s10")
-    RodResilienceHelp := mg.AddText("x140 y255 w50 h20 c" Accent, "what?")
-    RodResilienceHelp.SetFont("underline")
-    RodResilienceHelp.OnEvent("Click", (*) => InfoPopup.Show("Rod Resilience", "you should know this"))
-        Resilience := mg.AddEdit("x250 y255 w40 h20", Format("{:.2f}", MAIN["resilience"]))
-    mg.AddText("x300 y257 w85 h20 c" TextColor, "15% -> 0.15")
-
-    mg.AddText("x20 y280 w150 h20 c" TextColor, "Rod Equipped").SetFont("s10")
-    global RodEquipped := mg.AddText("x140 y280 w150 h100 c" TextColor, GetRodDisplayText())
+    mg.AddText("x20 y260 w150 h20 c" TextColor, "Rod Equipped").SetFont("s10")
+    global RodEquipped := mg.AddText("x140 y260 w150 h100 c" TextColor, GetRodDisplayText())
     RodEquipped.SetFont("s10")
-    CheckEquippedBtn := mg.AddText("x300 y282 w50 h20 c" Accent, "Check")
+    CheckEquippedBtn := mg.AddText("x300 y262 w50 h20 c" Accent, "Check")
     CheckEquippedBtn.SetFont("underline")
     CheckEquippedBtn.OnEvent("Click", (*) => UpdateEquippedRod())
 
-    StatusText := mg.AddText("x20 y320 w150 h20 c" TextColor, "Status: ---")
+    StatusText := mg.AddText("x20 y295 w150 h20 c" TextColor, "Status: ---")
     StatusText.SetFont("s10")
 
-    PowerText := mg.AddText("x20 y345 w150 h20 c" TextColor, "Power: ---")
+    PowerText := mg.AddText("x20 y315 w150 h20 c" TextColor, "Power: ---")
     PowerText.SetFont("s10")
 
-    ProgressText := mg.AddText("x20 y365 w150 h20 c" TextColor, "Progress: ---")
+    ProgressText := mg.AddText("x20 y335 w150 h20 c" TextColor, "Progress: ---")
     ProgressText.SetFont("s10")
 
-    CaughtText := mg.AddText("x220 y320 w150 h20 c" TextColor, "Caught: 0")
+    CaughtText := mg.AddText("x220 y295 w150 h20 c" TextColor, "Caught: 0")
     CaughtText.SetFont("s10")
 
-    LostText := mg.AddText("x220 y345 w150 h20 c" TextColor, "Lost: 0")
+    LostText := mg.AddText("x220 y315 w150 h20 c" TextColor, "Lost: 0")
     LostText.SetFont("s10")
 
-    SuccessRateText := mg.AddText("x220 y365 w160 h20 c" TextColor, "Success Rate: 0.0%")
+    SuccessRateText := mg.AddText("x220 y335 w160 h20 c" TextColor, "Success Rate: 0.0%")
     SuccessRateText.SetFont("s10")
 
-    mg.AddGroupBox("x10 y400 w380 h90 c" TextColor, "Info").SetFont("s9 bold")
+    mg.AddGroupBox("x10 y370 w380 h90 c" TextColor, "Info").SetFont("s9 bold")
 
-    mg.AddText("x20 y420 w150 h20 c" TextColor, "Start Macro: " HOTKEYS["start_macro"]).SetFont("s10")
-    mg.AddText("x20 y440 w150 h20 c" TextColor, "Fix Roblox: " HOTKEYS["fix_roblox"]).SetFont("s10")
-    mg.AddText("x20 y460 w150 h20 c" TextColor, "Reload: " HOTKEYS["reload"]).SetFont("s10")
-    ChangeHotkeysBtn := mg.AddText("x320 y463 w65 h20 c" Accent, "Change 🡒")
+    mg.AddText("x20 y390 w150 h20 c" TextColor, "Start Macro: " HOTKEYS["start_macro"]).SetFont("s10")
+    mg.AddText("x20 y410 w150 h20 c" TextColor, "Fix Roblox: " HOTKEYS["fix_roblox"]).SetFont("s10")
+    mg.AddText("x20 y430 w150 h20 c" TextColor, "Reload: " HOTKEYS["reload"]).SetFont("s10")
+    ChangeHotkeysBtn := mg.AddText("x320 y433 w65 h20 c" Accent, "Change 🡒")
     ChangeHotkeysBtn.SetFont("s10 underline")
     ChangeHotkeysBtn.OnEvent("Click", (*) => MainTab.Choose(3))
 
-    mg.AddGroupBox("x10 y495 w380 h50 c" TextColor, "Config").SetFont("s9 bold")
+    mg.AddGroupBox("x10 y465 w380 h50 c" TextColor, "Config").SetFont("s9 bold")
 
     configList := ListConfigs()
     ddlItems := configList.Length > 0 ? configList : ["No configs"]
-    ConfigDDL := mg.AddDDL("x20 y515 w160 h200", ddlItems)
+    ConfigDDL := mg.AddDDL("x20 y485 w160 h200", ddlItems)
     lastConfig := SETTINGS.Has("last_config") ? SETTINGS["last_config"] : ""
     if (lastConfig != "" && configList.Length > 0) {
         try ControlChooseString(lastConfig, ConfigDDL)
@@ -152,39 +145,39 @@ GetGui() {
         ConfigDDL.Choose(1)
     }
 
-    LoadConfigBtn := button(mg, "Load", 190, 515, {
+    LoadConfigBtn := button(mg, "Load", 190, 485, {
         w: 42,
         h: 22,
         bg: BgColor
     })
     LoadConfigBtn.OnEvent("Click", (*) => OnLoadConfig(ConfigDDL))
 
-    SaveConfigBtn := button(mg, "Save", 237, 515, {
+    SaveConfigBtn := button(mg, "Save", 237, 485, {
         w: 42,
         h: 22,
         bg: BgColor
     })
     SaveConfigBtn.OnEvent("Click", (*) => OnSaveConfig(ConfigDDL))
 
-    NewConfigBtn := button(mg, "New", 284, 515, {
+    NewConfigBtn := button(mg, "New", 284, 485, {
         w: 42,
         h: 22,
         bg: BgColor
     })
     NewConfigBtn.OnEvent("Click", (*) => OnNewConfig(ConfigDDL))
 
-    DeleteConfigBtn := button(mg, "Del", 331, 515, {
+    DeleteConfigBtn := button(mg, "Del", 331, 485, {
         w: 42,
         h: 22,
         bg: BgColor
     })
     DeleteConfigBtn.OnEvent("Click", (*) => OnDeleteConfig(ConfigDDL))
     
-    OpenConfigsBtn := mg.AddText("x20 y580 w150 h20 c" Accent, "Open Configs folder")
+    OpenConfigsBtn := mg.AddText("x20 y525 w150 h20 c" Accent, "Open Configs folder")
     OpenConfigsBtn.SetFont("underline")
     OpenConfigsBtn.OnEvent("Click", (*) => Run("explorer.exe `"" CONFIGS_DIR "`""))
 
-    OpenAdvSettingsBtn := mg.AddText("x20 y600 w150 h20 c" Accent, "Open Advanced Settings")
+    OpenAdvSettingsBtn := mg.AddText("x225 y525 w150 h20 c" Accent, "Open Advanced Settings")
     OpenAdvSettingsBtn.SetFont("s10 underline")
     OpenAdvSettingsBtn.OnEvent("Click", (*) => GetAdvSettingsGui())
 
@@ -361,7 +354,7 @@ GetGui() {
 
     MainTab.UseTab(4)
         mg.AddText("x10 y30 w300 h100 c" TextColor, "Version " FULL_VER).SetFont("s15 bold italic")
-        mg.AddText("x270 y33 w120 h50 c" TextColor, "May 7, 2026").SetFont("s12 bold")
+        mg.AddText("x270 y33 w120 h50 c" TextColor, "May 14, 2026").SetFont("s12 bold")
 
         ChangelogText := "- Migrated offsets.json to a nested, structured format`n"
                        . "    (top-level `"Roblox Version`" + grouped `"Offsets`" categories)`n"
@@ -381,7 +374,8 @@ GetGui() {
 
     MainTab.UseTab(5)
     mg.AddText("x10 y30 w300 h40 c" TextColor, "OpenMacro XTernal").SetFont("s15 bold")
-    mg.AddText("x10 y60 w300 h40 c" TextColor, "Designed, developed and maintained by Misery").SetFont("s10")
+    mg.AddText("x10 y60 w300 h40 c" TextColor, "Designed, developed && maintained by Misery").SetFont("s10")
+    mg.AddText("x10 y100 w380 h40 c" TextColor, "Thanks to my booster spider (@asxspider) <3").SetFont("s10")
     mg.AddText("x10 y580 w300 h30 c" TextColor, "© 2026 Misery. All rights reserved.")
 
     CreditsDiscordLink := mg.AddText("x275 y580 w200 h30 c" Accent, "Official Discord Server")
@@ -395,13 +389,16 @@ GetGui() {
     mg.Show("w400 h630 y100 x1100")
     UpdateRobloxUiState()
     UpdateMacroStatus("OFF", "---", "---")
+	MainTab.OnEvent("Change", ResizeGuiTab)
     MainTab.Choose(1)
+	ResizeGuiTab(MainTab)
     lastAllowedTab := MainTab.Value
 
     if (SETTINGS.Has("just_updated") && SETTINGS["just_updated"]) {
         SETTINGS["just_updated"] := false
         SaveSettingsFile()
         MainTab.Choose(4)
+		ResizeGuiTab(MainTab)
     }
 
     mg.OnEvent("Close", (*) => ExitApp())
@@ -494,6 +491,23 @@ GetGui() {
 
     UpdateAppraiseControls() {
     }
+	
+	ResizeGuiTab(ctrl, *){
+		switch ctrl.Value{
+			case 1: ; home
+				w := 400, h := 550
+			case 2: ; appraisal
+				w := 400, h := 400
+			case 3: ; Settings
+				w := 400, h := 620
+			case 4: ; Changelog
+				w := 400, h := 620
+			case 5: ; Credits
+				w := 400, h := 620
+		}
+		MainTab.Move(0, 0, w, h)
+		mg.Show ("w" w " h" h)
+	}
 }
 
 GetRobloxStatusText() {
