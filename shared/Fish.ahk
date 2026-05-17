@@ -1043,7 +1043,7 @@ GetActiveNoteTarget() {
 		return ""
 
 	best := ""
-	bestY := -999999
+	bestY := -999999.0
 
 	for noteName in ["note1", "note2"] {
 		noteAddr := FindChildByName(noteContainer, noteName)
