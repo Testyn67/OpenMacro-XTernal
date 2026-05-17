@@ -356,19 +356,11 @@ GetGui() {
         mg.AddText("x10 y30 w300 h100 c" TextColor, "Version " FULL_VER).SetFont("s15 bold italic")
         mg.AddText("x270 y33 w120 h50 c" TextColor, "May 14, 2026").SetFont("s12 bold")
 
-        ChangelogText := "- Migrated offsets.json to a nested, structured format`n"
-                       . "    (top-level `"Roblox Version`" + grouped `"Offsets`" categories)`n"
-                       . "- offsets.json now uses decimal integers instead of hex strings`n"
-                       . "- LoadOffsets now flattens the nested JSON internally via a rename map,`n"
-                       . "    so existing memory reads continue to work unchanged`n"
-                       . "- Added OFFSETS_ROBLOX_VERSION global populated from the new top-level field`n"
-                       . "- Self-healing offsets: on attach, local offsets are tested in-memory`n"
-                       . "    (DataModel ClassName + Workspace/Players children canary). If stale,`n"
-                       . "    the latest offsets are fetched from imtheo.lol, re-tested, and on`n"
-                       . "    success written to offsets.json (previous file kept as offsets.json.bak).`n"
-                       . "- Remote fetch is TTL-cached (60s) to avoid network spam on repeated attaches`n"
-                       . "- Full execution-flow logging through the heal pipeline via the totem debug log`n"
-                       . "- General bug fixes"
+        ChangelogText := "- Improvements to PinionController and added Dreambreaker support`n"
+                       . "    - GetActiveNoteTarget now checks and prioritizes notes based on Note Y value`n"
+					   . "    - Added GetBothTargets to calculate midpoint between note and fish if possible to catch`n"
+					   . "    - Added UpdateNoteCount to count notes caught in a row and detect resonance, reset if note is missed`n"
+					   . "    - Dreambreaker support now added, can detect and reverse controls once inversion state is reached`n"
 
         mg.AddText("x15 y65 w370 h510 c" TextColor, ChangelogText).SetFont("s10")
 
