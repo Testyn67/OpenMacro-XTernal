@@ -1286,6 +1286,8 @@ class PinionController extends FishingController {
         if (ctx = "")
             ctx := GetReelBarContext()
         fishX := super.GetFishPosition(ctx)
+		if (!ctx || !ctx.playerbar)
+			return fishX
 		playerbarSize := ReadFrameSize(ctx.playerbar)
 		halfWidth := playerbarSize.X / 2
 		
