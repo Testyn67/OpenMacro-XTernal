@@ -354,13 +354,9 @@ GetGui() {
 
     MainTab.UseTab(4)
         mg.AddText("x10 y30 w300 h100 c" TextColor, "Version " FULL_VER).SetFont("s15 bold italic")
-        mg.AddText("x270 y33 w120 h50 c" TextColor, "May 14, 2026").SetFont("s12 bold")
+        mg.AddText("x270 y33 w120 h50 c" TextColor, "May 18, 2026").SetFont("s12 bold")
 
-        ChangelogText := "- Improvements to PinionController and added Dreambreaker support`n"
-                       . "    - GetActiveNoteTarget now checks and prioritizes notes based on Note Y value`n"
-					   . "    - Added GetBothTargets to calculate midpoint between note and fish if possible to catch`n"
-					   . "    - Added UpdateNoteCount to count notes caught in a row and detect resonance, reset if note is missed`n"
-					   . "    - Dreambreaker support now added, can detect and reverse controls once inversion state is reached`n"
+        ChangelogText := "Patched for version-9377ee10133e4be3"
 
         mg.AddText("x15 y65 w370 h510 c" TextColor, ChangelogText).SetFont("s10")
 
