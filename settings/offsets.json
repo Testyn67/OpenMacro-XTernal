@@ -1,9 +1,9 @@
 {
     "Source": "https://imtheo.lol/Offsets",
-    "Roblox Version": "version-4b6315bf1f0a4dbb",
+    "Roblox Version": "version-2b1721d47abf49aa",
     "Dumper Version": "2.1.6",
     "Dumped By": "theo (https://imtheo.lol)",
-    "Dumped At": "20:49 21/05/2026",
+    "Dumped At": "20:47 23/05/2026",
     "Discord": "https://discord.gg/rbxoffsets",
     "Total Offsets": 381,
     "Offsets": {
@@ -11,21 +11,21 @@
             "Pointer": 0
         },
         "TaskScheduler": {
-            "Pointer": 133678200,
+            "Pointer": 130017672,
             "JobStart": 200,
             "JobEnd": 208,
             "JobName": 24,
             "MaxFPS": 176
         },
         "VisualEngine": {
-            "Pointer": 133508336,
+            "Pointer": 129847800,
             "Dimensions": 2720,
             "ViewMatrix": 320,
-            "RenderView": 2960,
+            "RenderView": 2944,
             "FakeDataModel": 2688
         },
         "FakeDataModel": {
-            "Pointer": 126257768,
+            "Pointer": 122644312,
             "RealDataModel": 464
         },
         "MouseService": {
@@ -152,7 +152,7 @@
             "Looped": 341
         },
         "SpawnLocation": {
-            "AllowTeamChangeOnTouch": 504,
+            "AllowTeamChangeOnTouch": 69,
             "Enabled": 505,
             "Neutral": 506,
             "ForcefieldDuration": 496,
@@ -230,7 +230,7 @@
             "HipHeight": 416,
             "MaxSlopeAngle": 440,
             "SeatPart": 288,
-            "HumanoidRootPart": 1152,
+            "HumanoidRootPart": 1160,
             "CameraOffset": 320,
             "HealthDisplayDistance": 408,
             "NameDisplayDistance": 444,
@@ -250,11 +250,11 @@
             "RequiresNeck": 489,
             "AutoJumpEnabled": 480,
             "AutoRotate": 481,
-            "IsWalking": 2335,
+            "IsWalking": 2343,
             "MoveToPoint": 380,
             "MoveToPart": 304,
-            "WalkTimer": 1040,
-            "HumanoidState": 2208,
+            "WalkTimer": 1048,
+            "HumanoidState": 2216,
             "HumanoidStateID": 32,
             "FloorMaterial": 400,
             "TargetPoint": 356
@@ -370,7 +370,7 @@
             "BorderColor3": 1364,
             "TextColor3": 3672,
             "LayoutOrder": 1416,
-            "ZIndex": 411,
+            "ZIndex": 1452,
             "BackgroundTransparency": 1364,
             "Rotation": 392
         },
@@ -501,7 +501,7 @@
             "Speed": 228,
             "TimePosition": 232,
             "Looped": 245,
-            "IsPlaying": 2576
+            "IsPlaying": 2584
         },
         "Animator": {
             "ActiveAnimations": 2152
