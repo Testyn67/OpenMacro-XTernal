@@ -1,9 +1,9 @@
 {
     "Source": "https://imtheo.lol/Offsets",
-    "Roblox Version": "version-2b1721d47abf49aa",
-    "Dumper Version": "2.1.6",
+    "Roblox Version": "version-460909c4fe904aae",
+    "Dumper Version": "2.1.7",
     "Dumped By": "theo (https://imtheo.lol)",
-    "Dumped At": "20:47 23/05/2026",
+    "Dumped At": "02:17 27/05/2026",
     "Discord": "https://discord.gg/rbxoffsets",
     "Total Offsets": 381,
     "Offsets": {
@@ -11,21 +11,21 @@
             "Pointer": 0
         },
         "TaskScheduler": {
-            "Pointer": 130017672,
+            "Pointer": 132511352,
             "JobStart": 200,
             "JobEnd": 208,
             "JobName": 24,
             "MaxFPS": 176
         },
         "VisualEngine": {
-            "Pointer": 129847800,
-            "Dimensions": 2720,
-            "ViewMatrix": 320,
-            "RenderView": 2944,
-            "FakeDataModel": 2688
+            "Pointer": 134140160,
+            "Dimensions": 2736,
+            "ViewMatrix": 336,
+            "RenderView": 2992,
+            "FakeDataModel": 2704
         },
         "FakeDataModel": {
-            "Pointer": 122644312,
+            "Pointer": 126677464,
             "RealDataModel": 464
         },
         "MouseService": {
@@ -57,7 +57,7 @@
             "Parent": 112,
             "ClassDescriptor": 24,
             "ClassName": 8,
-            "ClassBase": 18392,
+            "ClassBase": 18720,
             "AttributeContainer": 72,
             "AttributeList": 24,
             "AttributeToNext": 88,
@@ -95,7 +95,7 @@
         },
         "Workspace": {
             "World": 1032,
-            "ReadOnlyGravity": 2528,
+            "ReadOnlyGravity": 2544,
             "DistributedGameTime": 1232,
             "CurrentCamera": 1200
         },
@@ -230,7 +230,7 @@
             "HipHeight": 416,
             "MaxSlopeAngle": 440,
             "SeatPart": 288,
-            "HumanoidRootPart": 1160,
+            "HumanoidRootPart": 1152,
             "CameraOffset": 320,
             "HealthDisplayDistance": 408,
             "NameDisplayDistance": 444,
@@ -250,11 +250,11 @@
             "RequiresNeck": 489,
             "AutoJumpEnabled": 480,
             "AutoRotate": 481,
-            "IsWalking": 2343,
+            "IsWalking": 2335,
             "MoveToPoint": 380,
             "MoveToPart": 304,
-            "WalkTimer": 1048,
-            "HumanoidState": 2216,
+            "WalkTimer": 1040,
+            "HumanoidState": 2208,
             "HumanoidStateID": 32,
             "FloorMaterial": 400,
             "TargetPoint": 356
@@ -276,7 +276,7 @@
             "Tooltip": 1144,
             "TextureId": 880,
             "Grip": 1212,
-            "Enabled": 1225,
+            "Enabled": 437,
             "CanBeDropped": 1224,
             "ManualActivationOnly": 1226,
             "RequiresHandle": 1227
@@ -329,8 +329,8 @@
             "CanQuery": 32
         },
         "MeshPart": {
-            "MeshId": 760,
-            "Texture": 808
+            "MeshId": 768,
+            "Texture": 816
         },
         "Model": {
             "PrimaryPart": 632,
@@ -352,26 +352,26 @@
             "Part1": 224
         },
         "UnionOperation": {
-            "AssetId": 752
+            "AssetId": 760
         },
         "PlayerMouse": {
             "Workspace": 360,
             "Icon": 224
         },
         "GuiObject": {
-            "ScreenGui_Enabled": 1228,
-            "Position": 1304,
-            "Size": 1336,
-            "Visible": 1461,
-            "Image": 2448,
-            "Text": 3496,
-            "RichText": 2912,
-            "BackgroundColor3": 1352,
-            "BorderColor3": 1364,
-            "TextColor3": 3672,
-            "LayoutOrder": 1416,
-            "ZIndex": 1452,
-            "BackgroundTransparency": 1364,
+            "ScreenGui_Enabled": 1236,
+            "Position": 1312,
+            "Size": 1344,
+            "Visible": 1469,
+            "Image": 2456,
+            "Text": 3504,
+            "RichText": 2920,
+            "BackgroundColor3": 1360,
+            "BorderColor3": 1372,
+            "TextColor3": 3680,
+            "LayoutOrder": 1424,
+            "ZIndex": 1460,
+            "BackgroundTransparency": 1372,
             "Rotation": 392
         },
         "GuiBase2D": {
@@ -501,7 +501,7 @@
             "Speed": 228,
             "TimePosition": 232,
             "Looped": 245,
-            "IsPlaying": 2584
+            "IsPlaying": 2576
         },
         "Animator": {
             "ActiveAnimations": 2152
