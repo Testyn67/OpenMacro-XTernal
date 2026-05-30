@@ -1,8 +1,8 @@
 # XTernal by OpenMacro
 
 **An external memory based macro for Roblox Fisch**
-Developed & designed by misery ([@termx3](https://github.com/termx3))
-Maintained by shinkting ([@Invermatic1](https://github.com/Invermatic1))
+Developed & designed by misery ([@termx3](https://github.com/termx3))\n
+Maintained by shinkting ([@Invermatic1](https://github.com/Invermatic1))\n
 [Join our Discord](https://discord.gg/openmacro)
 
 ---
