@@ -3,7 +3,6 @@
 **An external memory based macro for Roblox Fisch**
 
 Developed & designed by misery ([@termx3](https://github.com/termx3))
-
 Maintained by shinkting ([@Invermatic1](https://github.com/Invermatic1))
 
 [Join our Discord](https://discord.gg/openmacro)
