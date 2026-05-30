@@ -1,7 +1,7 @@
 #Requires AutoHotkey v2.0
 
 MAJOR_VER       := "v0"
-FULL_VER        := "v0.2.34"
+FULL_VER        := "v0.2.35"
 ROBLOX_VER      := "version-bf6344c9c23446bf"
 GITHUB_OWNER        := "termx3"
 GITHUB_REPO         := "OpenMacro-XTernal"
@@ -123,7 +123,7 @@ GetDefaultSettings() {
     )
 
     defaults["main"] := Map(
-		"close_threshold", 0.06,
+		"close_threshold", 0.01,
         "derivative_gain", 0.55,
         "edge_boundary", 0.1,
         "neutral_duty_cycle", 0.5,
@@ -146,7 +146,6 @@ GetDefaultSettings() {
         "auto_appraise_click_x", "",
         "auto_appraise_click_y", "",
         "auto_totem_enabled", 0,
-		"public_server_enabled", 0,
         "auto_totem_name", "Aurora Totem",
         "auto_totem_mode", "expire",
         "auto_totem_interval_sec", 900,
