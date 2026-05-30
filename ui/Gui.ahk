@@ -132,15 +132,15 @@ GetGui() {
 
     mg.AddGroupBox("x10 y395 w380 h90 c" TextColor, "Info").SetFont("s9 bold")
 
-    mg.AddText("x20 y415 w150 h20 c" TextColor, "Start Macro: " HOTKEYS["start_macro"]).SetFont("s10")
-    mg.AddText("x20 y435 w150 h20 c" TextColor, "Fix Roblox: " HOTKEYS["fix_roblox"]).SetFont("s10")
-    mg.AddText("x20 y455 w150 h20 c" TextColor, "Reload: " HOTKEYS["reload"]).SetFont("s10")
-    ChangeHotkeysBtn := mg.AddText("x320 y453 w65 h20 c" Accent, "Change 🡒")
+    mg.AddText("x20 y410 w150 h20 c" TextColor, "Start Macro: " HOTKEYS["start_macro"]).SetFont("s10")
+    mg.AddText("x20 y430 w150 h20 c" TextColor, "Fix Roblox: " HOTKEYS["fix_roblox"]).SetFont("s10")
+    mg.AddText("x20 y450 w150 h20 c" TextColor, "Reload: " HOTKEYS["reload"]).SetFont("s10")
+    ChangeHotkeysBtn := mg.AddText("x320 y433 w65 h20 c" Accent, "Change 🡒")
     ChangeHotkeysBtn.SetFont("s10 underline")
     ChangeHotkeysBtn.OnEvent("Click", (*) => MainTab.Choose(3))
 
     mg.AddGroupBox("x10 y490 w380 h50 c" TextColor, "Config").SetFont("s9 bold")
-	
+
     configList := ListConfigs()
     ddlItems := configList.Length > 0 ? configList : ["No configs"]
     ConfigDDL := mg.AddDDL("x20 y510 w160 h200", ddlItems)
@@ -370,16 +370,16 @@ GetGui() {
 
     MainTab.UseTab(4)
         mg.AddText("x10 y30 w300 h100 c" TextColor, "Version " FULL_VER).SetFont("s15 bold italic")
-        mg.AddText("x270 y33 w120 h50 c" TextColor, "May 25, 2026").SetFont("s12 bold")
+        mg.AddText("x270 y33 w120 h50 c" TextColor, "May 30, 2026").SetFont("s12 bold")
 
-        ChangelogText := "Implemented fixes to appraisal and readded close threshold"
+        ChangelogText := "Added sovereign weather detection and nuke failsafe"
 
         mg.AddText("x15 y65 w370 h510 c" TextColor, ChangelogText).SetFont("s10")
 
     MainTab.UseTab(5)
     mg.AddText("x10 y30 w300 h40 c" TextColor, "OpenMacro XTernal").SetFont("s15 bold")
     mg.AddText("x10 y60 w300 h40 c" TextColor, "Designed, developed by Misery").SetFont("s10")
-	mg.AddText("x10 y80 w300 h40 c" TextColor, "Maintained By Shinkting and mimi").SetFont("s10")
+	mg.AddText("x10 y80 w300 h40 c" TextColor, "Maintained By Shinkting").SetFont("s10")
     mg.AddText("x10 y100 w380 h40 c" TextColor, "Thanks to my booster spider (@asxspider) <3").SetFont("s10")
     mg.AddText("x10 y580 w300 h30 c" TextColor, "© 2026 Misery. All rights reserved.")
 
@@ -437,7 +437,6 @@ GetGui() {
 
 	value := Integer(value)
 
-	; Optional limits. Adjust these however you want.
 	if (value < 0) {
 		ctrl.Value := MAIN["appraise_delay_ms"]
 		MsgBox("Appraise Delay cannot be a negative.", "Invalid Appraise Delay")
