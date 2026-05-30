@@ -211,6 +211,40 @@ GetWorldStatusText(statusName) {
     return NormalizeHotbarItemText(text)
 }
 
+; there is nothing but SLOP here dude
+; putting a whole ass function here for a single bugfix like a chud
+HasWorldStatusModifier(statusName, modifierNeedle) {
+	; For some reason, the memory reader cannot actually read the "+ sovereign" unless you hover over it
+	; Even though this is a little fucked up, its surprisingly more reliable than trying to check the textlabel
+	
+    worldStatuses := ResolveWorldStatuses()
+    if !worldStatuses
+        return false
+
+    statusAddr := FindChildByName(worldStatuses, statusName)
+    if !statusAddr
+        return false
+
+    modifiersFrame := FindChildByName(statusAddr, "modifiers")
+    if !modifiersFrame
+        return false
+
+    modifierNeedle := StrLower(modifierNeedle)
+
+    for childAddr in ReadChildren(modifiersFrame) {
+        childClass := ReadClassName(childAddr)
+        childName := ReadInstanceName(childAddr)
+
+        if (childClass != "ImageLabel")
+            continue
+
+        if InStr(StrLower(childName), modifierNeedle)
+            return true
+    }
+
+    return false
+}
+
 GetWorldStatusVisible(statusName) {
     global OFFSETS
 
@@ -239,6 +273,10 @@ IsNightCycle() {
 IsAuroraActive() {
     return IsWorldStatusMatchVisible("2_event", "aurora")
         || IsWorldStatusMatchVisible("3_weather", "aurora")
+}
+
+IsSovereignActive() {
+    return HasWorldStatusModifier("3_weather", "sovereign")
 }
 
 FindHotbarItemByName(itemName) {
