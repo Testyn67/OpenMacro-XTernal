@@ -224,13 +224,6 @@ GetCurrentWeather() {
     return Trim(ReadWorldStringValue(GetWorldWeatherInstance()))
 }
 
-GetCurrentSovereign() {
-    weatherInst := GetWorldWeatherInstance()
-    if (!weatherInst)
-        return ""
-
-    return NormalizeWorldNone(ReadWorldStringValue(FindChildByName(weatherInst, "sovereign")))
-}
 
 GetCurrentMeteorological() {
     weatherInst := GetWorldWeatherInstance()
@@ -259,9 +252,6 @@ IsAuroraActive() {
     return InStr(StrLower(GetCurrentWeather()), "aurora") ? true : false
 }
 
-IsSovereignActive() {
-    return (GetCurrentSovereign() != "") ? true : false
-}
 
 FindHotbarItemByName(itemName) {
     hotbar := GetHotbarGui()

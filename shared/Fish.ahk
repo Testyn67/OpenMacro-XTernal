@@ -237,12 +237,6 @@ IsAutoTotemRuntimeEnabled() {
     return MAIN["auto_totem_enabled"] && (MAIN["auto_totem_name"] = "Aurora Totem")
 }
 
-; New checkbox in autototem
-
-IsPublicServerEnabled() {
-    global MAIN
-    return MAIN["public_server_enabled"]
-}
 
 GetAutoTotemIntervalMs() {
     global MAIN
@@ -375,12 +369,6 @@ RunAutoTotemWorkflowStep() {
         Macro.totemWaitStartedAt := A_TickCount
         return
     }
-	; New check, and it works out the box?? I must be sick in the head
-	if (IsPublicServerEnabled() && IsSovereignActive()) {
-		ResetAutoTotemControl()
-		Macro.totemBlockedUntilCatchEnd := true
-		return
-	}
 	
 	if (!TryUseAutoTotemItem("Sundial Totem")) {
 		CompleteAutoTotemWorkflow(false)
@@ -428,12 +416,6 @@ UpdateAutoTotemState() {
 
 			if (Macro.totemRetryCount >= 1) {
 				CompleteAutoTotemWorkflow(false)
-				return
-			}
-			; New check, and it works out the box?? I must be sick in the head
-			if (IsPublicServerEnabled() && IsSovereignActive()) {
-				ResetAutoTotemControl()
-				Macro.totemBlockedUntilCatchEnd := true
 				return
 			}
 
