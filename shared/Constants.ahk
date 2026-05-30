@@ -1,7 +1,7 @@
 #Requires AutoHotkey v2.0
 
 MAJOR_VER       := "v0"
-FULL_VER        := "v0.2.33"
+FULL_VER        := "v0.2.34"
 ROBLOX_VER      := "version-bf6344c9c23446bf"
 GITHUB_OWNER        := "termx3"
 GITHUB_REPO         := "OpenMacro-XTernal"
@@ -142,9 +142,11 @@ GetDefaultSettings() {
         "completion_threshold", 99.7,
         "shake_interval_ms", 25,
         "auto_appraise_mutation", "Mythical",
+		"appraise_delay_ms", 100,
         "auto_appraise_click_x", "",
         "auto_appraise_click_y", "",
         "auto_totem_enabled", 0,
+		"public_server_enabled", 0,
         "auto_totem_name", "Aurora Totem",
         "auto_totem_mode", "expire",
         "auto_totem_interval_sec", 900,
@@ -159,8 +161,7 @@ GetDefaultSettings() {
         "webhook_summary_totem_pops", 1,
         "webhook_summary_session_time", 1,
         "webhook_summary_cast_timeouts", 1,
-        "webhook_alert_totem_failed", 1,
-		"appraise_delay_ms", 100
+        "webhook_alert_totem_failed", 1
     )
 
     defaults["last_config"] := ""
