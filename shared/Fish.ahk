@@ -237,6 +237,13 @@ IsAutoTotemRuntimeEnabled() {
     return MAIN["auto_totem_enabled"] && (MAIN["auto_totem_name"] = "Aurora Totem")
 }
 
+; New checkbox in autototem
+
+IsPublicServerEnabled() {
+    global MAIN
+    return MAIN["public_server_enabled"]
+}
+
 GetAutoTotemIntervalMs() {
     global MAIN
     return Max(1, MAIN["auto_totem_interval_sec"] + 0) * 1000
@@ -368,14 +375,20 @@ RunAutoTotemWorkflowStep() {
         Macro.totemWaitStartedAt := A_TickCount
         return
     }
+	; New check, and it works out the box?? I must be sick in the head
+	if (IsPublicServerEnabled() && IsSovereignActive()) {
+		ResetAutoTotemControl()
+		Macro.totemBlockedUntilCatchEnd := true
+		return
+	}
+	
+	if (!TryUseAutoTotemItem("Sundial Totem")) {
+		CompleteAutoTotemWorkflow(false)
+		return
+	}
 
-    if (!TryUseAutoTotemItem("Sundial Totem")) {
-        CompleteAutoTotemWorkflow(false)
-        return
-    }
-
-    Macro.totemState := "TOTEM_WAIT_NIGHT"
-    Macro.totemWaitStartedAt := A_TickCount
+	Macro.totemState := "TOTEM_WAIT_NIGHT"
+	Macro.totemWaitStartedAt := A_TickCount
 }
 
 UpdateAutoTotemState() {
@@ -396,35 +409,41 @@ UpdateAutoTotemState() {
             RunAutoTotemWorkflowStep()
             return
 
-        case "TOTEM_WAIT_NIGHT":
-            if (IsNightCycle()) {
-                Macro.totemRetryCount := 0
+		case "TOTEM_WAIT_NIGHT":
+			if (IsNightCycle()) {
+				Macro.totemRetryCount := 0
 
-                if (!TryUseAutoTotemItem("Aurora Totem")) {
-                    CompleteAutoTotemWorkflow(false)
-                    return
-                }
+				if (!TryUseAutoTotemItem("Aurora Totem")) {
+					CompleteAutoTotemWorkflow(false)
+					return
+				}
 
-                Macro.totemState := "TOTEM_WAIT_AURORA"
-                Macro.totemWaitStartedAt := A_TickCount
-                return
-            }
+				Macro.totemState := "TOTEM_WAIT_AURORA"
+				Macro.totemWaitStartedAt := A_TickCount
+				return
+			}
 
-            if ((A_TickCount - Macro.totemWaitStartedAt) < GetAutoTotemWaitMs())
-                return
+			if ((A_TickCount - Macro.totemWaitStartedAt) < GetAutoTotemWaitMs())
+				return
 
-            if (Macro.totemRetryCount >= 1) {
-                CompleteAutoTotemWorkflow(false)
-                return
-            }
+			if (Macro.totemRetryCount >= 1) {
+				CompleteAutoTotemWorkflow(false)
+				return
+			}
+			; New check, and it works out the box?? I must be sick in the head
+			if (IsPublicServerEnabled() && IsSovereignActive()) {
+				ResetAutoTotemControl()
+				Macro.totemBlockedUntilCatchEnd := true
+				return
+			}
 
-            if (!TryUseAutoTotemItem("Sundial Totem")) {
-                CompleteAutoTotemWorkflow(false)
-                return
-            }
+			if (!TryUseAutoTotemItem("Sundial Totem")) {
+				CompleteAutoTotemWorkflow(false)
+				return
+			}
 
-            Macro.totemRetryCount += 1
-            Macro.totemWaitStartedAt := A_TickCount
+			Macro.totemRetryCount += 1
+			Macro.totemWaitStartedAt := A_TickCount
 
         case "TOTEM_WAIT_AURORA":
             if ((A_TickCount - Macro.totemWaitStartedAt) < GetAutoTotemWaitMs())
@@ -499,10 +518,17 @@ UpdateCastingPhase() {
     if (!resolved.bar) {
         Macro.powerPercent := "---"
 
-        if ((A_TickCount - Macro.castStartedAt) >= Macro.castWaitTimeoutMs) {
-            Macro.castTimeoutCount += 1
-            MAIN["cast_on_timeout"] ? StartMacroCycle() : StopMacroCycle("OFF")
-        }
+		if ((A_TickCount - Macro.castStartedAt) >= Macro.castWaitTimeoutMs) {
+			Macro.castTimeoutCount += 1
+			; This should solve the problem of the macro stopping if a nuke is caught
+			; No im not making an actual fix
+			if MAIN["cast_on_timeout"] {
+				EnsureRodEquipped()
+				StartMacroCycle()
+			} else {
+				StopMacroCycle("OFF")
+			}
+		}
 
         return
     }
