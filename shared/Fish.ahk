@@ -274,7 +274,7 @@ IsAutoTotemDue() {
     }
 
     if (Macro.totemNightCovered) {
-        cycleText := StrLower(GetWorldStatusText("4_cycle"))
+        cycleText := StrLower(GetCurrentCycle())
         if (cycleText = "" || InStr(cycleText, "night"))
             return false
 

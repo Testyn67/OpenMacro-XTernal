@@ -123,6 +123,7 @@ OffsetRenameMap() {
         ["Instance",       "ChildrenStart",      "Children"],
         ["Instance",       "Parent",             "Parent"],
         ["Misc",           "StringLength",       "StringLength"],
+        ["Misc",           "Value",              "Value"],
         ["GuiObject",      "Text",               "TextLabelText"],
         ["GuiObject",      "Visible",            "TextLabelVisible"],
         ["GuiObject",      "Visible",            "FrameVisible"],
@@ -141,13 +142,13 @@ AreOffsetsLoaded() {
 ResetRobloxAttachmentState() {
     global H_PROCESS, RBLX_PID, RBLX_BASE, OFFSETS, ROD, Macro
     global g_CachedDataModel, g_CachedLocalPlayer, g_CachedPlayerGui
-    global g_CachedWorkspaceRoot, g_CachedWorldStatuses, g_CachedHotbarGui
+    global g_CachedWorkspaceRoot, g_CachedWorldConfig, g_CachedHotbarGui
 
     g_CachedDataModel := 0
     g_CachedLocalPlayer := 0
     g_CachedPlayerGui := 0
     g_CachedWorkspaceRoot := 0
-    g_CachedWorldStatuses := 0
+    g_CachedWorldConfig := 0
     g_CachedHotbarGui := 0
 
     if (IsSet(Macro) && Macro) {

@@ -21,7 +21,7 @@ g_CachedDataModel      := 0
 g_CachedLocalPlayer    := 0
 g_CachedPlayerGui      := 0
 g_CachedWorkspaceRoot  := 0
-g_CachedWorldStatuses  := 0
+g_CachedWorldConfig    := 0
 g_CachedHotbarGui      := 0
 
 APPDATA_DIR   := EnvGet("APPDATA") "\OpenMacro\XTernal"

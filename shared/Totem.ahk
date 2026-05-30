@@ -156,127 +156,111 @@ TryUseHotbarItem(itemName) {
     return false
 }
 
-ResolveWorldStatuses() {
-    global g_CachedWorldStatuses
+; ─────────────────────────────────────────────────────────────────────────
+;  World state (weather / cycle) is read from the authoritative
+;  ReplicatedStorage.world Configuration the game replicates. Since the weather
+;  overhaul, weather is three coexisting layers: the base "weather", a buffing
+;  "sovereign" child, and a "meteorological" (celestial, e.g. Aurora) child.
+;  This replaces the old HUD-scraping, which broke when the HUD layout changed.
+; ─────────────────────────────────────────────────────────────────────────
 
-    if (g_CachedWorldStatuses)
-        return g_CachedWorldStatuses
+GetWorldConfig() {
+    global g_CachedWorldConfig
 
-    localPlayer := GetLocalPlayer()
-    if (!localPlayer)
+    if (g_CachedWorldConfig)
+        return g_CachedWorldConfig
+
+    dataModel := GetDataModel()
+    if (!dataModel)
         return 0
 
-    playerGui := FindChildByClass(localPlayer, "PlayerGui")
-    if (!playerGui)
+    replicatedStorage := FindChildByClass(dataModel, "ReplicatedStorage")
+    if (!replicatedStorage)
         return 0
 
-    hud := FindChildByName(playerGui, "hud")
-    if (!hud)
-        return 0
+    world := FindChildByName(replicatedStorage, "world")
+    if (world)
+        g_CachedWorldConfig := world
 
-    safezone := FindChildByName(hud, "safezone")
-    if (!safezone)
-        return 0
-
-    worldStatuses := FindChildByName(safezone, "worldstatuses")
-    if (worldStatuses)
-        g_CachedWorldStatuses := worldStatuses
-
-    return worldStatuses
+    return world
 }
 
-GetWorldStatusText(statusName) {
+; Read a StringValue's Value: inline std::string at +Value, falling back to a
+; pointer-to-string if the inline read is empty.
+ReadWorldStringValue(instanceAddr) {
     global OFFSETS
 
-    worldStatuses := ResolveWorldStatuses()
-    if !worldStatuses
+    if (!instanceAddr)
         return ""
 
-    statusAddr := FindChildByName(worldStatuses, statusName)
-    if !statusAddr
-        return ""
+    valueOffset := OFFSETS.Has("Value") ? (OFFSETS["Value"] + 0) : 0xd0
 
-    labelAddr := FindChildByName(statusAddr, "label")
-    if !labelAddr
-        return ""
+    embedded := ReadString(instanceAddr + valueOffset)
+    if (embedded != "")
+        return embedded
 
-    text := ""
+    ptr := ReadPointer(instanceAddr + valueOffset)
+    if (ptr)
+        return ReadString(ptr)
 
-    if OFFSETS.Has("TextLabelText")
-        text := ReadString(labelAddr + (OFFSETS["TextLabelText"] + 0))
-
-    if (text = "")
-        text := ReadGuiText(labelAddr)
-
-    return NormalizeHotbarItemText(text)
+    return ""
 }
 
-; there is nothing but SLOP here dude
-; putting a whole ass function here for a single bugfix like a chud
-HasWorldStatusModifier(statusName, modifierNeedle) {
-	; For some reason, the memory reader cannot actually read the "+ sovereign" unless you hover over it
-	; Even though this is a little fucked up, its surprisingly more reliable than trying to check the textlabel
-	
-    worldStatuses := ResolveWorldStatuses()
-    if !worldStatuses
-        return false
-
-    statusAddr := FindChildByName(worldStatuses, statusName)
-    if !statusAddr
-        return false
-
-    modifiersFrame := FindChildByName(statusAddr, "modifiers")
-    if !modifiersFrame
-        return false
-
-    modifierNeedle := StrLower(modifierNeedle)
-
-    for childAddr in ReadChildren(modifiersFrame) {
-        childClass := ReadClassName(childAddr)
-        childName := ReadInstanceName(childAddr)
-
-        if (childClass != "ImageLabel")
-            continue
-
-        if InStr(StrLower(childName), modifierNeedle)
-            return true
-    }
-
-    return false
+; The game stores "None" for an inactive layer; surface that as empty.
+NormalizeWorldNone(value) {
+    trimmed := Trim(value)
+    return (StrLower(trimmed) = "none") ? "" : trimmed
 }
 
-GetWorldStatusVisible(statusName) {
-    global OFFSETS
+GetWorldWeatherInstance() {
+    world := GetWorldConfig()
+    if (!world)
+        return 0
 
-    worldStatuses := ResolveWorldStatuses()
-    if !worldStatuses
-        return false
+    return FindChildByName(world, "weather")
+}
 
-    statusAddr := FindChildByName(worldStatuses, statusName)
-    if !statusAddr
-        return false
+GetCurrentWeather() {
+    return Trim(ReadWorldStringValue(GetWorldWeatherInstance()))
+}
 
-    if OFFSETS.Has("TextLabelVisible")
-        return ReadByte(statusAddr + (OFFSETS["TextLabelVisible"] + 0)) ? true : false
+GetCurrentSovereign() {
+    weatherInst := GetWorldWeatherInstance()
+    if (!weatherInst)
+        return ""
 
-    if OFFSETS.Has("FrameVisible")
-        return ReadByte(statusAddr + (OFFSETS["FrameVisible"] + 0)) ? true : false
+    return NormalizeWorldNone(ReadWorldStringValue(FindChildByName(weatherInst, "sovereign")))
+}
 
-    return true
+GetCurrentMeteorological() {
+    weatherInst := GetWorldWeatherInstance()
+    if (!weatherInst)
+        return ""
+
+    return NormalizeWorldNone(ReadWorldStringValue(FindChildByName(weatherInst, "meteorological")))
+}
+
+GetCurrentCycle() {
+    world := GetWorldConfig()
+    if (!world)
+        return ""
+
+    return Trim(ReadWorldStringValue(FindChildByName(world, "cycle")))
 }
 
 IsNightCycle() {
-    cycleText := StrLower(GetWorldStatusText("4_cycle"))
-    return InStr(cycleText, "night") ? true : false
+    return InStr(StrLower(GetCurrentCycle()), "night") ? true : false
 }
 
 IsAuroraActive() {
-    return IsWorldStatusMatchVisible("2_event", "aurora")
-        || IsWorldStatusMatchVisible("3_weather", "aurora")
+    if InStr(StrLower(GetCurrentMeteorological()), "aurora")
+        return true
+
+    return InStr(StrLower(GetCurrentWeather()), "aurora") ? true : false
 }
 
 IsSovereignActive() {
-    return HasWorldStatusModifier("3_weather", "sovereign")
+    return (GetCurrentSovereign() != "") ? true : false
 }
 
 FindHotbarItemByName(itemName) {
@@ -324,13 +308,6 @@ NormalizeHotbarItemText(text) {
 
 IsSupportedAutoTotem(toolName) {
     return (toolName = "Aurora Totem")
-}
-
-IsWorldStatusMatchVisible(statusName, needle) {
-    if !GetWorldStatusVisible(statusName)
-        return false
-
-    return InStr(StrLower(GetWorldStatusText(statusName)), StrLower(needle)) ? true : false
 }
 
 FindDescendantByNameAndClass(rootAddr, targetName, targetClass := "") {
