@@ -34,6 +34,34 @@ A: XTernal is built specifically for **Fisch** on Roblox.
 
 ---
 
+## License & Copyright
+
+Copyright © 2026 (@anorexc). All rights reserved except as expressly granted
+below.
+
+XTernal is licensed under the **GNU Affero General Public License, version 3.0
+only (AGPL-3.0-only)** — see [`LICENSE`](LICENSE) and [`NOTICE`](NOTICE).
+
+What this means:
+- **You may** use, study, modify, and redistribute it, **provided** your version
+  is also released under AGPL-3.0 with complete corresponding source.
+- **AGPL §13:** if you run a modified version that users interact with over a
+  network, you must make that version's complete source available to them.
+- **You may NOT** incorporate this code into closed-source or proprietary
+  software, or strip the copyright, license, or attribution notices.
+- The `library/` directory contains third-party code under its own licenses;
+  the above applies only to the original XTernal source (`Main.ahk`, `shared/`,
+  `ui/`).
+
+Removing the `LICENSE`/`NOTICE` files or in-file headers does not waive any
+rights or place the code in the public domain. For any use not permitted by
+AGPL-3.0, you must obtain separate written permission from the copyright holder.
+
+Contributions are accepted under the [Contributor License Agreement](CLA.md);
+see [`CONTRIBUTING.md`](CONTRIBUTING.md).
+
+---
+
 *XTernal is part of the OpenMacro product suite. For other tools, visit our Discord.*
 
 ---
