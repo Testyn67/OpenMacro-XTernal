@@ -24,7 +24,7 @@ XTernal operates externally to Roblox, reading game memory to react to real inga
 ## FAQ
 
 **Q: Is XTernal free?**
-A: Yes. XTernal is completely free and open-source under the GPL-3.0 license.
+A: Yes. XTernal is completely free and open-source under the AGPL-3.0 license.
 
 **Q: Where can I get support?**
 A: Join our [Discord server](https://discord.gg/openmacro) for help, updates, and the community.

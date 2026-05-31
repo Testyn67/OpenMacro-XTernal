@@ -1,23 +1,18 @@
 /*
 OpenMacro XTernal
-Copyright © 2026 (@anorexc) on Discord. All rights reserved.
+Copyright © 2026 (@anorexc) on Discord.
 
-This software is source available. You are granted a limited, non-exclusive, non-transferable, revocable license to:
-- Access and view the source code
-- Study and learn from the source code
-- Use the software for personal, non-commercial purposes
-- Make modifications for your own personal use (these modifications remain your property but cannot be distributed)
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU Affero General Public License as published by the Free
+Software Foundation, either version 3 of the License, or (at your option) any
+later version.
 
-Restrictions:
-- You may NOT redistribute the software or any modified version, in source or binary form.
-- You may NOT use the software for any commercial purpose (including but not limited to selling, offering as a service, or incorporating into a commercial product).
-- You may NOT create public forks, sublicense, or republish the code or substantial portions of it.
-- You may NOT remove or alter this license notice or copyright statements.
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.
 
-Contributions:
-By submitting any contribution (code, documentation, etc.), you agree that your contribution is
-licensed under the terms of this license and that yarn retains full rights to use, modify, and incorporate it.
-You do not retain ownership rights that allow you to license or distribute the contribution independently in a way that conflicts with these terms.
+You should have received a copy of the GNU Affero General Public License along
+with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
 #Requires AutoHotkey v2.0
