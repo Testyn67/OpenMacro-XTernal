@@ -242,6 +242,21 @@ GetMacroDisplayStatus() {
     return (Macro.totemState != "IDLE") ? Macro.totemState : Macro.phase
 }
 
+CancelTotem() {
+    global Macro
+
+    needsRodReequip := Macro.totemNeedsRodReequip
+
+    ResetAutoTotemControl()
+
+    Macro.lastTotemAttemptAt := A_TickCount
+    Macro.totemBlockedUntilCatchEnd := true
+
+    if (needsRodReequip)
+        EnsureRodEquipped()
+}
+
+
 ResetAutoTotemControl() {
     global Macro
 
@@ -259,6 +274,10 @@ IsAutoTotemRuntimeEnabled() {
     return MAIN["auto_totem_enabled"] && (MAIN["auto_totem_name"] = "Aurora Totem")
 }
 
+IsPublicServerEnabled() {
+    global MAIN
+    return MAIN["public_server_enabled"]
+}
 
 GetAutoTotemIntervalMs() {
     global MAIN
@@ -311,6 +330,13 @@ UpdateAutoTotem() {
                 SelectHotbarSlot("1")
             ResetAutoTotemControl()
         }
+        return false
+    }
+	
+    if (IsPublicServerEnabled() && IsTotemBlocked()) {
+        if (Macro.totemState != "IDLE" || Macro.totemPending)
+            CancelTotem()
+
         return false
     }
 
@@ -375,6 +401,11 @@ BeginAutoTotemWorkflow() {
 
 RunAutoTotemWorkflowStep() {
     global Macro
+	
+	if(IsPublicServerEnabled() && IsTotemBlocked()){
+		CancelTotem()
+		return
+	}
 
     if (IsAuroraActive()) {
         CompleteAutoTotemWorkflow(true)
@@ -403,6 +434,11 @@ RunAutoTotemWorkflowStep() {
 
 UpdateAutoTotemState() {
     global Macro
+	
+	if(IsPublicServerEnabled() && IsTotemBlocked()){
+		CancelTotem()
+		return
+	}
 
     if (IsAuroraActive()) {
         CompleteAutoTotemWorkflow(true)

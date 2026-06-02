@@ -134,6 +134,9 @@ GetAdvSettingsGui() {
 
     AutoTotemEnabled := mg.AddCheckbox("x20 y140 h20 w20")
     mg.AddText("x40 y141 w60 h20 c" TextColor, "Enable").SetFont("s10")
+	
+	PublicServerEnabled := mg.AddCheckbox("x120 y140 h20 w20")
+    mg.AddText("x140 y141 w100 h20 c" TextColor, "Public Server").SetFont("s10")
 
     SaveTotemBtn := button(mg, "Save", 270, 138, {w: 100, h: 23, bg: BgColor, fontSize: 10})
 
@@ -227,6 +230,7 @@ GetAdvSettingsGui() {
         ShakeInterval.Value := MAIN["shake_interval_ms"]
 
         AutoTotemEnabled.Value := MAIN["auto_totem_enabled"]
+		PublicServerEnabled.Value := MAIN["public_server_enabled"]
         UseModeDdl.Choose(MAIN["auto_totem_mode"] = "interval" ? 2 : 1)
         TotemInterval.Value := MAIN["auto_totem_interval_sec"]
         ApplyUseMode()
@@ -304,6 +308,9 @@ GetAdvSettingsGui() {
 
         MAIN["auto_totem_enabled"] := AutoTotemEnabled.Value
         SETTINGS["main"]["auto_totem_enabled"] := AutoTotemEnabled.Value
+
+		MAIN["public_server_enabled"] := PublicServerEnabled.Value
+        SETTINGS["main"]["public_server_enabled"] := PublicServerEnabled.Value
 
         MAIN["auto_totem_name"] := selectedTotem
         SETTINGS["main"]["auto_totem_name"] := selectedTotem

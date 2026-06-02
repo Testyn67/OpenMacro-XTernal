@@ -274,6 +274,17 @@ IsAuroraActive() {
     return InStr(StrLower(GetCurrentWeather()), "aurora") ? true : false
 }
 
+IsTotemBlocked() {
+	met := StrLower(GetCurrentMeteorological())
+	weather := StrLower(GetCurrentWeather())
+
+	return (
+		InStr(met, "starfall")
+		|| InStr(weather, "starfall")
+		|| InStr(met, "rainbow")
+		|| InStr(weather, "rainbow")
+	) ? true : false
+}
 
 FindHotbarItemByName(itemName) {
     hotbar := GetHotbarGui()
