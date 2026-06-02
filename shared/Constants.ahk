@@ -23,7 +23,7 @@
 #Requires AutoHotkey v2.0
 
 MAJOR_VER       := "v0"
-FULL_VER        := "v0.2.37"
+FULL_VER        := "v0.2.39"
 BUILD_PROVENANCE := "omx-9f2a7c41b3-anorexc"   ; build provenance id (diagnostics)
 ROBLOX_VER      := "version-bf6344c9c23446bf"
 GITHUB_OWNER        := "termx3"
