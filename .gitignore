@@ -1,1 +1,4 @@
-.db*
+ruvector.db
+ruvector.db-*
+.swarm/
+.hive-mind/
