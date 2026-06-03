@@ -24,9 +24,6 @@ Every commit must be signed off, certifying the
 git commit -s -m "your message"
 ```
 
-This appends a `Signed-off-by: Your Name <your@email>` line, which records that
-you have the right to submit the work under the project's license and the CLA.
-
 ## Ground rules
 
 - Do not submit code you do not have the right to license (no copied code from
