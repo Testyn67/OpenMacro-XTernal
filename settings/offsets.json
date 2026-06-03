@@ -1,9 +1,9 @@
 {
   "Source": "https://imtheo.lol/Offsets",
-  "Roblox Version": "version-a182ba0d4c6f483b",
+  "Roblox Version": "version-460909c4fe904aae",
   "Dumper Version": "2.1.7",
   "Dumped By": "theo (https://imtheo.lol)",
-  "Dumped At": "18:13 02/06/2026",
+  "Dumped At": "02:17 27/05/2026",
   "Discord": "https://discord.gg/rbxoffsets",
   "Total Offsets": 381,
   "Offsets": {
@@ -11,21 +11,21 @@
       "Pointer": 0
     },
     "TaskScheduler": {
-      "Pointer": 132711752,
+      "Pointer": 132511352,
       "JobStart": 200,
       "JobEnd": 208,
       "JobName": 24,
       "MaxFPS": 176
     },
     "VisualEngine": {
-      "Pointer": 134340528,
+      "Pointer": 134140160,
       "Dimensions": 2736,
       "ViewMatrix": 336,
       "RenderView": 2992,
       "FakeDataModel": 2704
     },
     "FakeDataModel": {
-      "Pointer": 126874152,
+      "Pointer": 126677464,
       "RealDataModel": 464
     },
     "MouseService": {
@@ -152,7 +152,7 @@
       "Looped": 341
     },
     "SpawnLocation": {
-      "AllowTeamChangeOnTouch": 61,
+      "AllowTeamChangeOnTouch": 69,
       "Enabled": 505,
       "Neutral": 506,
       "ForcefieldDuration": 496,
@@ -215,7 +215,7 @@
       "MinZoomDistance": 820,
       "MaxZoomDistance": 816,
       "CameraMode": 824,
-      "Mouse": 4480
+      "Mouse": 4472
     },
     "Team": {
       "BrickColor": 208
@@ -277,7 +277,7 @@
       "Tooltip": 1144,
       "TextureId": 880,
       "Grip": 1212,
-      "Enabled": 1225,
+      "Enabled": 437,
       "CanBeDropped": 1224,
       "ManualActivationOnly": 1226,
       "RequiresHandle": 1227
@@ -305,7 +305,7 @@
     "BasePart": {
       "Primitive": 328,
       "Transparency": 240,
-      "Color3": 114,
+      "Color3": 404,
       "Shape": 433,
       "Massless": 247,
       "CastShadow": 245,
@@ -360,19 +360,19 @@
       "Icon": 224
     },
     "GuiObject": {
-      "ScreenGui_Enabled": 1220,
-      "Position": 1296,
-      "Size": 1328,
-      "Visible": 1453,
-      "Image": 2440,
-      "Text": 3488,
-      "RichText": 2904,
-      "BackgroundColor3": 1344,
-      "BorderColor3": 1356,
-      "TextColor3": 3664,
-      "LayoutOrder": 1408,
-      "ZIndex": 411,
-      "BackgroundTransparency": 1356,
+      "ScreenGui_Enabled": 1236,
+      "Position": 1312,
+      "Size": 1344,
+      "Visible": 1469,
+      "Image": 2456,
+      "Text": 3504,
+      "RichText": 2920,
+      "BackgroundColor3": 1360,
+      "BorderColor3": 1372,
+      "TextColor3": 3680,
+      "LayoutOrder": 1424,
+      "ZIndex": 1460,
+      "BackgroundTransparency": 1372,
       "Rotation": 392
     },
     "GuiBase2D": {
