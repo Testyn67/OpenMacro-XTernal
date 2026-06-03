@@ -24,7 +24,6 @@
 
 MAJOR_VER       := "v0"
 FULL_VER        := "v0.2.41"
-BUILD_PROVENANCE := "omx-9f2a7c41b3-anorexc"   ; build provenance id (diagnostics)
 ROBLOX_VER      := "version-bf6344c9c23446bf"
 GITHUB_OWNER        := "termx3"
 GITHUB_REPO         := "OpenMacro-XTernal"
