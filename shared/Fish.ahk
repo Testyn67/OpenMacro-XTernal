@@ -184,6 +184,8 @@ StartMacroCycle() {
         Controller := TranquilityController()
     else if (IsPinionRodText(ROD))
         Controller := PinionController()
+    else if (IsBellonaRodText(ROD))
+        Controller := BellonaController()
     else
         Controller := FishingController()
 	Dreambreaker := IsDreambreakerRodText(ROD)
@@ -198,7 +200,12 @@ StopMacroCycle(nextPhase := "OFF") {
     finalProgress := Macro.progressPercent
 
     ReleaseMouse()
+    wasBellona := (Type(Controller) == "BellonaController")
     Controller.Reset()
+    if (wasBellona) {
+        Sleep(50)
+        Send("{RButton}")
+    }
 
     Macro.powerPercent := ""
     Macro.castStartedAt := 0
@@ -242,21 +249,6 @@ GetMacroDisplayStatus() {
     return (Macro.totemState != "IDLE") ? Macro.totemState : Macro.phase
 }
 
-CancelTotem() {
-    global Macro
-
-    needsRodReequip := Macro.totemNeedsRodReequip
-
-    ResetAutoTotemControl()
-
-    Macro.lastTotemAttemptAt := A_TickCount
-    Macro.totemBlockedUntilCatchEnd := true
-
-    if (needsRodReequip)
-        EnsureRodEquipped()
-}
-
-
 ResetAutoTotemControl() {
     global Macro
 
@@ -274,10 +266,6 @@ IsAutoTotemRuntimeEnabled() {
     return MAIN["auto_totem_enabled"] && (MAIN["auto_totem_name"] = "Aurora Totem")
 }
 
-IsPublicServerEnabled() {
-    global MAIN
-    return MAIN["public_server_enabled"]
-}
 
 GetAutoTotemIntervalMs() {
     global MAIN
@@ -330,13 +318,6 @@ UpdateAutoTotem() {
                 SelectHotbarSlot("1")
             ResetAutoTotemControl()
         }
-        return false
-    }
-	
-    if (IsPublicServerEnabled() && IsTotemBlocked()) {
-        if (Macro.totemState != "IDLE" || Macro.totemPending)
-            CancelTotem()
-
         return false
     }
 
@@ -401,11 +382,6 @@ BeginAutoTotemWorkflow() {
 
 RunAutoTotemWorkflowStep() {
     global Macro
-	
-	if(IsPublicServerEnabled() && IsTotemBlocked()){
-		CancelTotem()
-		return
-	}
 
     if (IsAuroraActive()) {
         CompleteAutoTotemWorkflow(true)
@@ -434,11 +410,6 @@ RunAutoTotemWorkflowStep() {
 
 UpdateAutoTotemState() {
     global Macro
-	
-	if(IsPublicServerEnabled() && IsTotemBlocked()){
-		CancelTotem()
-		return
-	}
 
     if (IsAuroraActive()) {
         CompleteAutoTotemWorkflow(true)
@@ -643,8 +614,16 @@ UpdateFishingPhase() {
 
     Macro.powerPercent := ""
 
-    reelGuiVisible := IsReelGuiVisible()
-    ctx := reelGuiVisible ? GetReelBarContext() : 0
+    isBellona := (Type(Controller) == "BellonaController")
+
+    if (isBellona) {
+        contexts := GetBellonaContexts()
+        reelGuiVisible := (contexts.Length > 0)
+        ctx := reelGuiVisible ? contexts[1] : 0
+    } else {
+        reelGuiVisible := IsReelGuiVisible()
+        ctx := reelGuiVisible ? GetReelBarContext() : 0
+    }
 
     progress := GetFishingCompletionPercent()
     Macro.progressPercent := (progress = "" ? "" : Round(progress))
@@ -652,7 +631,7 @@ UpdateFishingPhase() {
     if (progress != "" && progress >= (MAIN["completion_threshold"] + 0.0))
         Macro.completionReached := true
 
-    if (Macro.completionReached) {
+    if (Macro.completionReached && Type(Controller) != "BellonaController") {
         ReleaseMouse(true)
         Controller.Reset()
 
@@ -922,6 +901,33 @@ GetReelBarContext() {
         fish: fishAddr,
         playerbar: playerbarAddr
     }
+}
+
+GetBellonaContexts() {
+    playerGui := FindPlayerGui()
+    if (!playerGui)
+        return []
+
+    contexts := []
+    for childPtr in ReadChildren(playerGui) {
+        name := ReadInstanceName(childPtr)
+        ; Check if the GUI name starts with "reel" (case-insensitive)
+        if (InStr(name, "reel") == 1) {
+            if (!IsReelGuiVisible(childPtr))
+                continue
+            
+            for barPtr in ReadChildren(childPtr) {
+                if (ReadInstanceName(barPtr) = "bar") {
+                    fish := FindChildByName(barPtr, "fish")
+                    playerbar := FindChildByName(barPtr, "playerbar")
+                    if (fish && playerbar) {
+                        contexts.Push({ bar: barPtr, fish: fish, playerbar: playerbar })
+                    }
+                }
+            }
+        }
+    }
+    return contexts
 }
 
 HasActiveFishingContext(ctx := "") {
@@ -1464,5 +1470,98 @@ class TranquilityController {
         this.lastKeySentAt[key] := now
         this.hitNotes[noteAddr] := now
         return true
+    }
+}
+
+class BellonaSubController extends FishingController {
+    __New(button) {
+        this.button := button
+        this.isHoldingBtn := false
+        this.lastActionAtBtn := 0
+    }
+
+    Reset() {
+        super.Reset()
+        this.ForceRelease()
+    }
+
+    Hold() {
+        global MAIN, Macro
+        if (this.isHoldingBtn)
+            return
+
+        delay := MAIN["fishing_action_delay_ms"] + 0
+        if (Macro.phase == "FISHING" && delay > 0 && this.lastActionAtBtn && (A_TickCount - this.lastActionAtBtn) < delay)
+            return
+
+        Send("{" this.button " down}")
+        this.isHoldingBtn := true
+        this.lastActionAtBtn := A_TickCount
+    }
+
+    Release() {
+        global MAIN, Macro
+        if (!this.isHoldingBtn)
+            return
+
+        delay := MAIN["fishing_action_delay_ms"] + 0
+        if (Macro.phase == "FISHING" && delay > 0 && this.lastActionAtBtn && (A_TickCount - this.lastActionAtBtn) < delay)
+            return
+
+        Send("{" this.button " up}")
+        this.isHoldingBtn := false
+        this.lastActionAtBtn := A_TickCount
+    }
+
+    ForceRelease() {
+        if (this.isHoldingBtn) {
+            Send("{" this.button " up}")
+            this.isHoldingBtn := false
+        }
+    }
+}
+
+class BellonaController {
+    __New() {
+        this.leftCtrl := BellonaSubController("LButton")
+        this.rightCtrl := BellonaSubController("RButton")
+    }
+
+    Reset() {
+        this.leftCtrl.Reset()
+        this.rightCtrl.Reset()
+    }
+
+    Update(ctx := "") {
+        contexts := GetBellonaContexts()
+        if (contexts.Length == 0) {
+            this.leftCtrl.Release()
+            this.rightCtrl.Release()
+            return
+        }
+
+        leftContext := 0
+        rightContext := 0
+
+        for c in contexts {
+            pos := ReadFramePosition(c.bar)
+            ; X scale determines the side of the screen
+            if (pos.X < 0.5)
+                leftContext := c
+            else
+                rightContext := c
+        }
+
+        ; Left sidebar -> Left Click
+        if (leftContext)
+            this.leftCtrl.Update(leftContext)
+        else
+            this.leftCtrl.Release()
+
+        ; Right sidebar -> Right Click
+        if (rightContext)
+            this.rightCtrl.Update(rightContext)
+        else
+            this.rightCtrl.Release()
     }
 }

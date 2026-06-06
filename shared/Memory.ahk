@@ -579,7 +579,8 @@ GetKnownRodNames() {
         "Toxic Spire Rod",
         "Gardenkeeper Rod",
         "Voyager Rod",
-        "Vineweaver Rod"
+        "Vineweaver Rod",
+        "Bellona's Waraxe"
     ]
 
     return rodNames
@@ -599,6 +600,14 @@ IsPinionRodText(text) {
 
 HasPinionHotbarRod() {
     return IsPinionRodText(GetHotbarRodDisplayText())
+}
+
+IsBellonaRodText(text) {
+    return InStr(StrLower(NormalizeRodDisplayText(text)), "bellona") ? true : false
+}
+
+HasBellonaHotbarRod() {
+    return IsBellonaRodText(GetHotbarRodDisplayText())
 }
 
 IsTranquilityRodText(text) {
